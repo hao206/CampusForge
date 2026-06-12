@@ -1,0 +1,6 @@
+{
+  "name": "CampusForge",
+  "description": "Student Project & Collaboration Ecosystem. Build Together, Learn Together, Grow Together.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
