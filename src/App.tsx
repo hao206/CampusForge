@@ -580,6 +580,10 @@ export default function App() {
   const { lang, accent } = useUIStore();
   const t = translations[lang];
 
+  useEffect(() => {
+    document.title = t.appName;
+  }, [t.appName]);
+
   if (!user) {
     return (
       <div className="min-h-screen bg-[#050505] text-[#FAFAFA] flex items-center justify-center p-4 relative [color-scheme:dark]">
