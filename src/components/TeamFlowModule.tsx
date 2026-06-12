@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { 
-  Kanban, ClipboardList, Flame, ArrowRight, ArrowLeft, Calendar, 
-  Play, CheckCircle2, UserCheck, Plus, ListFilter, Loader2 
+  Flame, ArrowRight, ArrowLeft, CheckCircle2, Plus
 } from 'lucide-react';
-import { Task, TaskStatus, Project } from '../types';
+import { Task, TaskStatus } from '../types';
 import { translations } from '../translations';
 
 // Zustand store imports
@@ -255,7 +254,7 @@ export const TeamFlowModule: React.FC<TeamFlowProps> = ({
     }
 
     const matchedProj = projects.find(p => p.id === selectedProjectId);
-    const created = addTask({
+    addTask({
       projectId: selectedProjectId,
       projectName: matchedProj ? matchedProj.name : 'Individual Task',
       title: taskTitle,

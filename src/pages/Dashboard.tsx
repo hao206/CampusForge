@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Flame, Calendar, Award, LayoutGrid, CheckCircle2, RefreshCw, BarChart2, TrendingUp 
+  BarChart2, TrendingUp
 } from 'lucide-react';
 
 import { useUIStore } from '../store/useUIStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { useProjectStore } from '../store/useProjectStore';
 import { useTaskStore } from '../store/useTaskStore';
-import { useAuditStore } from '../store/useAuditStore';
 import { translations } from '../translations';
 import { INITIAL_LEADERBOARD } from '../data';
 
@@ -26,7 +25,6 @@ export const Dashboard: React.FC = () => {
   const user = useAuthStore((s) => s.user);
   const projects = useProjectStore((s) => s.projects);
   const tasks = useTaskStore((s) => s.tasks);
-  const auditLogs = useAuditStore((s) => s.auditLogs);
 
   const [widgetTaskFilter, setWidgetTaskFilter] = useState<'All' | 'High'>('All');
 
@@ -40,8 +38,6 @@ export const Dashboard: React.FC = () => {
 
   // Calculate dynamic Sprint completion stats
   const completedTasks = tasks.filter(t => t.status === 'Done').length;
-  const totalTasks = tasks.length || 1;
-  const sprintBurnProgress = Math.round((completedTasks / totalTasks) * 100);
 
   // Derive charts data for Part D1 from auditLogs or fallback on structured mock data sets
   // Mock data representing Last 7 Days Completed Tasks

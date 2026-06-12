@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Download, Upload, Sparkles, Star, HelpCircle, Check, Search } from 'lucide-react';
+import { Download, Upload, Sparkles, HelpCircle, Check, Search } from 'lucide-react';
 import { Resource, SkillExchangeOffer, Mentor } from '../types';
 import { SKILL_EXCHANGE_DATA, INITIAL_MENTORS } from '../data';
 
@@ -9,7 +9,6 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useResourceStore } from '../store/useResourceStore';
 import { useAuditStore } from '../store/useAuditStore';
 import { useToastStore } from '../store/useToastStore';
-import { useNotificationStore } from '../store/useNotificationStore';
 import { translations } from '../translations';
 
 interface ResourceMarketplaceMentorProps {
@@ -29,7 +28,6 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
 
   const addLog = useAuditStore((s) => s.addLog);
   const addToast = useToastStore((s) => s.addToast);
-  const addNotification = useNotificationStore((s) => s.addNotification);
   const addReputation = useAuthStore((s) => s.addReputation);
 
   const activeUserRole = currentUserRole || user?.role || 'Student';

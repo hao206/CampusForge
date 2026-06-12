@@ -1,13 +1,9 @@
 import React from 'react';
-import { Award, Zap } from 'lucide-react';
-import { useUIStore } from '../store/useUIStore';
+import { Zap } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
-import { translations } from '../translations';
 import { INITIAL_LEADERBOARD } from '../data';
 
 export const Achievements: React.FC = () => {
-  const { lang } = useUIStore();
-  const t = translations[lang];
   const user = useAuthStore((s) => s.user);
 
   // Extend rankings to put current user's actual XP progress dynamically! (Part D3)

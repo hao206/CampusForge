@@ -1,20 +1,32 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# CampusForge
 
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/568498f0-af34-44e3-83be-62af0de18b33
+CampusForge is a student collaboration workspace for project teams, task tracking, learning resources, community posts, achievements, profile customization, and administration audit views.
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
+Prerequisites: Node.js 20+
 
+```bash
+npm install
+npm run dev
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+The local Vite app runs at `http://localhost:3000`.
+
+## Production Build
+
+```bash
+npm run build
+npm run start
+```
+
+`npm run start` serves the built `dist` folder with Express and supports client-side routing fallbacks.
+
+## Render Web Service
+
+Use these commands:
+
+```text
+Build Command: npm install && npm run build
+Start Command: npm run start
+```

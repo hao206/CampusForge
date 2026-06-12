@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Eye, Database, Terminal, Users, Layers, Activity, FileSpreadsheet, Trash2, Filter } from 'lucide-react';
+import { Terminal, Filter } from 'lucide-react';
 import { AuditLog } from '../types';
 import { Translations } from '../translations';
 
@@ -18,8 +18,6 @@ export const AdminSystemAuditModule: React.FC<AdminSystemAuditProps> = ({
   onClearLogs
 }) => {
   const [filterModule, setFilterModule] = useState('All');
-  const [terminalScrollEnabled, setTerminalScrollEnabled] = useState(true);
-
   // Administrative metrics counters
   const stats = [
     { label: t.totalUsers, value: '184 Peers', growth: '+14% month velocity', color: '#CCFF00' },

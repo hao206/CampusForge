@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { 
-  User, Mail, Code, Calendar, Award, MessageSquare, Plus, Edit2, Check, 
-  MapPin, BookOpen, Activity, LayoutGrid, CheckCircle2, Flame, RefreshCw 
+  User, Award, MessageSquare, Edit2, Check,
+  MapPin, BookOpen, Activity, LayoutGrid
 } from 'lucide-react';
 
 import { useAuthStore } from '../store/useAuthStore';
@@ -10,15 +10,12 @@ import { useProjectStore } from '../store/useProjectStore';
 import { useAuditStore } from '../store/useAuditStore';
 import { useUIStore } from '../store/useUIStore';
 import { useToastStore } from '../store/useToastStore';
-import { translations } from '../translations';
 import { UserProfile } from '../types';
 
 export const ProfilePage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
-  const navigate = useNavigate();
 
   const { lang, accent } = useUIStore();
-  const t = translations[lang];
 
   const currentUser = useAuthStore((s) => s.user);
   const updateProfile = useAuthStore((s) => s.updateProfile);

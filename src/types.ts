@@ -68,7 +68,7 @@ export interface Post {
 export interface Resource {
   id: string;
   title: string;
-  category: 'Report' | 'Slides' | 'Source Code' | 'Template' | 'Material';
+  category: 'Report' | 'Slides' | 'Source Code' | 'Template' | 'Material' | 'Syllabus';
   sharedBy: string;
   downloads: number;
   size: string;

@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import { 
   LayoutDashboard, FolderKanban, ClipboardCheck, MessageCircle, 
-  FileText, Award, Settings, ShieldCheck, Bell, LogOut, X, Menu, ShieldAlert
+  FileText, Award, Settings, ShieldCheck, Bell, LogOut, X, Menu
 } from 'lucide-react';
 
 // Core translations

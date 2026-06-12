@@ -3,11 +3,9 @@ import { useUIStore } from '../store/useUIStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { useAuditStore } from '../store/useAuditStore';
 import { useToastStore } from '../store/useToastStore';
-import { translations } from '../translations';
 
 export const Settings: React.FC = () => {
   const { lang, accent, setAccent } = useUIStore();
-  const t = translations[lang];
 
   const user = useAuthStore((s) => s.user);
   const updateProfile = useAuthStore((s) => s.updateProfile);

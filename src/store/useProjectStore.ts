@@ -28,7 +28,7 @@ export const useProjectStore = create<ProjectState>()(
         return added;
       },
 
-      applyProject: (projId, remark, applicantName) => {
+      applyProject: (_projId, _remark, _applicantName) => {
         // Application registration is a simulated system/logging action
         // But we can also set applied flag or just track applications locally if needed.
         // For general usage, we keep the signature and update matching projects team if needed.

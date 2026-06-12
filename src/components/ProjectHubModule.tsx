@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, FolderPlus, ToggleRight, Loader2, Star, Calendar, Users, CheckCircle } from 'lucide-react';
+import { Search, FolderPlus, Loader2, Star, Calendar, Users, CheckCircle } from 'lucide-react';
 import { Project } from '../types';
 import { translations } from '../translations';
 

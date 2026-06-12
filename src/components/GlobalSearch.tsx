@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, FolderKanban, ClipboardCheck, MessageCircle, FileText, Sparkles } from 'lucide-react';
+import { Search, FolderKanban, ClipboardCheck, MessageCircle, FileText } from 'lucide-react';
 import { useUIStore } from '../store/useUIStore';
 import { useProjectStore } from '../store/useProjectStore';
 import { useTaskStore } from '../store/useTaskStore';
