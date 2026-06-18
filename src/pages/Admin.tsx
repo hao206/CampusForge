@@ -9,7 +9,7 @@ export const Admin: React.FC = () => {
   const t = translations[lang];
   const user = useAuthStore((s) => s.user);
 
-  const isGovUser = user?.role === 'Admin' || user?.role === 'Project Leader';
+  const isGovUser = user?.role === 'Admin' || user?.role === 'Super Admin';
 
   if (!isGovUser) {
     return (
@@ -17,7 +17,7 @@ export const Admin: React.FC = () => {
         <span className="text-3xl">⚠️</span>
         <h2 className="text-lg font-black text-white uppercase tracking-wider">Access Intercepted</h2>
         <p className="text-xs text-slate-400">
-          This administration dashboard contains restricted governance credentials. Only Project Leaders or Campus Administrators are authorized to audit system metadata.
+          This administration dashboard contains restricted governance credentials. Only Campus Administrators are authorized to audit system metadata.
         </p>
       </div>
     );

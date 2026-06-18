@@ -1,19 +1,9 @@
-import express from 'express';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { buildApp } from './server/app.js';
+import { getServerConfig } from './server/config/serverConfig.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const app = express();
-const port = process.env.PORT || 3000;
-const distDir = path.join(__dirname, 'dist');
+const config = getServerConfig();
+const app = buildApp(config);
 
-app.use(express.static(distDir));
-
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(distDir, 'index.html'));
-});
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(config.port, () => {
+  console.log(`Server running on port ${config.port}`);
 });

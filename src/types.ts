@@ -1,4 +1,6 @@
 export type Role = 'Guest' | 'Student' | 'Project Leader' | 'Moderator' | 'Admin' | 'Super Admin';
+export type ReviewStatus = 'Pending' | 'Approved' | 'Rejected';
+export type NotificationAudience = Role | 'All';
 
 export interface UserProfile {
   id: string;
@@ -15,7 +17,12 @@ export interface UserProfile {
   interests: string[];
   careerGoals: string;
   reputationScore: number;
-  role: string;
+  github?: string;
+  linkedin?: string;
+  completedProjects?: { id: string; name: string; role: string; completedAt?: string }[];
+  role: Role;
+  locked?: boolean;
+  lastActiveAt?: string;
 }
 
 export type ProjectStatus = 'Recruiting' | 'Active' | 'Completed' | 'Archived';
@@ -32,6 +39,9 @@ export interface Project {
   status: ProjectStatus;
   leaderId: string;
   leaderName: string;
+  reviewStatus?: ReviewStatus;
+  hidden?: boolean;
+  featured?: boolean;
 }
 
 export type TaskStatus = 'Backlog' | 'To Do' | 'Doing' | 'Review' | 'Done';
@@ -63,6 +73,10 @@ export interface Post {
   topic: string;
   saved?: boolean;
   createdAt: string;
+  pinned?: boolean;
+  locked?: boolean;
+  hidden?: boolean;
+  moderationStatus?: ReviewStatus;
 }
 
 export interface Resource {
@@ -73,6 +87,7 @@ export interface Resource {
   downloads: number;
   size: string;
   link: string;
+  reviewStatus?: ReviewStatus;
 }
 
 export interface SkillExchangeOffer {
@@ -92,6 +107,7 @@ export interface Mentor {
   rating: number;
   sessionsBooked: number;
   skills: string[];
+  reviewStatus?: ReviewStatus;
 }
 
 export interface AuditLog {
@@ -101,4 +117,23 @@ export interface AuditLog {
   action: string;
   module: string;
   ip: string;
+}
+
+export interface AdminUser {
+  id: string;
+  fullName: string;
+  email: string;
+  role: Role;
+  status: 'Active' | 'Locked';
+  lastActiveAt: string;
+  activityHistory: string[];
+}
+
+export interface SystemNotification {
+  id: string;
+  title: string;
+  channel: 'System' | 'Email';
+  audience: NotificationAudience;
+  message: string;
+  createdAt: string;
 }

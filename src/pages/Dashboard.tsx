@@ -247,22 +247,8 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <span className="text-[10px] font-mono font-bold text-slate-400 uppercase block tracking-wider">
-                {t.graduationSkills}
-              </span>
-
-              <div className="space-y-3">
-                {user.skills && user.skills.map(s => (
-                  <div key={s.name} className="space-y-1">
-                    <div className="flex justify-between text-[9px] font-mono text-slate-500 uppercase">
-                      <span>{s.name}</span>
-                      <span>{lang === 'en' ? 'Level' : 'Cấp'} {s.level}/5</span>
-                    </div>
-                    <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-300" style={{ width: `${s.level * 20}%`, backgroundColor: accent }} />
-                    </div>
-                  </div>
-                ))}
+              <div className="text-[10px] text-slate-400">
+                {/* Graduation skills UI removed as per project configuration */}
               </div>
             </div>
 

@@ -9,6 +9,7 @@ interface PostState {
   likePost: (postId: string) => void;
   addComment: (postId: string, commentText: string, author: string) => void;
   moderatePost: (postId: string, action: 'Approve' | 'Reject') => void;
+  updatePostAdminState: (postId: string, updates: Pick<Partial<Post>, 'pinned' | 'locked' | 'hidden' | 'moderationStatus'>) => void;
   setPosts: (posts: Post[]) => void;
 }
 
@@ -71,6 +72,13 @@ export const usePostStore = create<PostState>()(
             action === 'Reject'
               ? state.posts.filter((p) => p.id !== postId)
               : state.posts, // For simple mock moderation, reject deletes the post.
+        })),
+
+      updatePostAdminState: (postId, updates) =>
+        set((state) => ({
+          posts: state.posts.map((post) =>
+            post.id === postId ? { ...post, ...updates } : post
+          ),
         })),
 
       setPosts: (posts) => set({ posts }),

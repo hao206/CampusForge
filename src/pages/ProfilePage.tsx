@@ -11,11 +11,13 @@ import { useAuditStore } from '../store/useAuditStore';
 import { useUIStore } from '../store/useUIStore';
 import { useToastStore } from '../store/useToastStore';
 import { UserProfile } from '../types';
+import { translations } from '../translations';
 
 export const ProfilePage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
 
-  const { lang, accent } = useUIStore();
+  const { lang, accent, setGuestBlockAction } = useUIStore();
+  const t = translations[lang];
 
   const currentUser = useAuthStore((s) => s.user);
   const updateProfile = useAuthStore((s) => s.updateProfile);
@@ -249,12 +251,22 @@ export const ProfilePage: React.FC = () => {
                   <Check className="w-4 h-4" /> {lang === 'en' ? 'Save Changes' : 'Lưu Thay đổi'}
                 </button>
               ) : (
-                <button 
-                  onClick={() => setIsEditing(true)}
-                  className="px-5 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer"
-                >
-                  <Edit2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Edit Profile' : 'Chỉnh sửa'}
-                </button>
+                // If current user is a Guest, prevent editing and show a prompt to login
+                currentUser?.role === 'Guest' ? (
+                  <button
+                    onClick={() => setGuestBlockAction(t.guestDescRestricted)}
+                    className="px-5 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" /> {t.loginToEditBtn}
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => setIsEditing(true)}
+                    className="px-5 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition cursor-pointer"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Edit Profile' : 'Chỉnh sửa'}
+                  </button>
+                )
               )}
             </div>
           </div>
@@ -274,48 +286,8 @@ export const ProfilePage: React.FC = () => {
         
         {/* Left Stats Section */}
         <div className="space-y-6">
-          <div className="bg-[#111111] border border-white/5 rounded-[32px] p-6 space-y-4">
-            <h3 className="text-sm font-black text-white uppercase tracking-wider font-mono">{lang === 'en' ? 'Academic Prestige' : 'Điểm Uy Tín & Huy Chương'}</h3>
-            <div className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-3">
-              <Award className="w-10 h-10 text-yellow-500 shrink-0" />
-              <div>
-                <span className="text-[9px] text-slate-500 block uppercase tracking-wider font-mono font-bold">Prestige Class Badge</span>
-                <span className="text-xs font-black text-white">{getBadgeRank(profile.reputationScore)}</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 pt-2 text-center">
-              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[18px] font-black text-white font-mono">{followersCount}</span>
-                <span className="text-[9px] text-slate-500 block uppercase font-bold">{lang === 'en' ? 'Followers' : 'Người theo dõi'}</span>
-              </div>
-              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-[18px] font-black text-white font-mono">{userProjects.length}</span>
-                <span className="text-[9px] text-slate-500 block uppercase font-bold">{lang === 'en' ? 'Agile Teams' : 'Đội Ngũ Đảm Nhiệm'}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Core Mastered Skills panel */}
-          <div className="bg-[#111111] border border-white/5 rounded-[32px] p-6 space-y-4">
-            <h3 className="text-sm font-black text-white uppercase tracking-wider font-mono">{lang === 'en' ? 'Graduation Skills' : 'Năng Lực Tốt Nghiệp'}</h3>
-            <div className="space-y-3">
-              {profile.skills.length > 0 ? profile.skills.map((skill, si) => (
-                <div key={si} className="space-y-1">
-                  <div className="flex justify-between text-xs text-slate-400 font-mono">
-                    <span>{skill.name}</span>
-                    <span>{skill.level}/5 Mastered</span>
-                  </div>
-                  <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                    <div className="h-full bg-[#CCFF00] rounded-full" style={{ width: `${(skill.level / 5) * 100}%` }} />
-                  </div>
-                </div>
-              )) : (
-                <span className="text-xs text-slate-500 block font-mono">No specialized skills defined.</span>
-              )}
-            </div>
-
-            {isEditing && isSelf && (
+          {isEditing && isSelf && (
+            <div className="bg-[#111111] border border-white/5 rounded-[32px] p-6 space-y-4">
               <div className="pt-3 border-t border-white/5 space-y-2">
                 <label className="text-[9px] uppercase tracking-wider font-bold text-[#CCFF00] block">Change avatar link</label>
                 <input 
@@ -326,8 +298,8 @@ export const ProfilePage: React.FC = () => {
                   placeholder="Unsplash photo avatar URL..."
                 />
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right Tab Content module (occupies 2 cols) */}

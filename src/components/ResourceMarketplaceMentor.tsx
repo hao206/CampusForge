@@ -203,7 +203,7 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Left side upload tool */}
-            <div className="bg-[#111111] border border-white/5 rounded-[32px] p-6 space-y-4 h-fit">
+            <div className="bg-[#111111] border border-white/12 shadow-[0_20px_90px_rgba(0,0,0,0.25)] rounded-[32px] p-6 space-y-4 h-fit">
               <div className="space-y-1">
                 <h3 className="font-bold text-white text-base font-display">{t.uploadResTitle}</h3>
                 <p className="text-slate-400 text-[11px] leading-relaxed">
@@ -253,23 +253,23 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
 
             {/* Right side catalog listings */}
             <div className="lg:col-span-2 space-y-4">
-              <div className="flex flex-col md:flex-row gap-3 bg-[#0C0C0C] border border-white/5 p-4 rounded-2xl">
+              <div className="flex flex-col md:flex-row gap-3 bg-[#0C0C0C] border border-white/5 p-4 rounded-3xl shadow-[0_24px_70px_rgba(0,0,0,0.2)]">
                 <div className="relative flex-1">
                   <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-500" />
                   <input
                     type="text"
-                    placeholder={lang === 'en' ? 'Filter files...' : 'Tìm tài liệu học tập...'}
+                    placeholder={t.resourceSearchPlaceholder}
                     value={searchResQuery}
                     onChange={(e) => setSearchResQuery(e.target.value)}
-                    className="w-full bg-[#161616] border border-white/5 text-sm text-white rounded-xl pl-10 pr-4 py-2.5 focus:outline-none"
+                    className="w-full bg-[#161616] border border-white/5 text-sm text-white rounded-2xl pl-10 pr-4 py-2.5 focus:outline-none"
                   />
                 </div>
                 <select
                   value={resCatFilter}
                   onChange={(e) => setResCatFilter(e.target.value)}
-                  className="bg-[#161616] border border-white/5 text-slate-300 text-xs rounded-xl px-4 py-3 focus:outline-none cursor-pointer"
+                  className="bg-[#161616] border border-white/5 text-slate-300 text-xs rounded-2xl px-4 py-3 focus:outline-none cursor-pointer"
                 >
-                  <option value="All">{lang === 'en' ? 'All Classes' : 'Tất cả tài liệu'}</option>
+                  <option value="All">{t.allResourcesLabel}</option>
                   <option value="Syllabus">Syllabus</option>
                   <option value="Template">Template</option>
                   <option value="Material">Material</option>
@@ -295,7 +295,8 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
                       <span className="text-[9px] text-slate-400 font-mono">Downloads: {res.downloads}</span>
                       <button
                         onClick={() => handleDownloadClick(res.id, res.title)}
-                        className="px-3 py-1.5 bg-white/5 text-white hover:bg-white/10 rounded-lg text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1.5 bg-[#0A0A0A] text-white hover:bg-[#141414] rounded-2xl text-[10px] font-bold transition flex items-center gap-1 cursor-pointer border border-white/10 shadow-sm"
+                        style={{ boxShadow: `0 10px 30px ${accentColor}20` }}
                       >
                         <Download className="w-3 h-3 text-slate-400" /> Download
                       </button>
@@ -331,7 +332,7 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
 
           {/* Peer recommendations box if triggered */}
           {matchSuggestion && (
-            <div className="p-6 bg-gradient-to-r from-emerald-950/20 to-black border border-emerald-500/30 rounded-2xl animate-fade-in relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="p-6 bg-gradient-to-r from-[#080808] via-[#090909] to-[#111111] border border-emerald-500/30 rounded-[32px] animate-fade-in relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-[0_20px_80px_rgba(0,0,0,0.3)]">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <span className="text-xs font-semibold px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase rounded-full tracking-wide">Counterpart Match Found</span>
@@ -356,9 +357,9 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
                   addToast(lang === 'en' ? 'Direct skill transaction invitation dispatched!' : 'Yêu cầu ghép cặp kỹ năng đã được chuyển đi!', 'success');
                   setMatchSuggestion(null);
                 }}
-                className="px-5 py-3 bg-emerald-500 text-black text-xs font-bold rounded-xl shrink-0 cursor-pointer hover:bg-emerald-600 transition"
+                className="px-5 py-3 bg-[#CCFF00] text-black text-xs font-bold rounded-2xl shrink-0 cursor-pointer hover:bg-[#D4FF4D] transition shadow-[0_20px_50px_rgba(204,255,0,0.18)]"
               >
-                Direct Connect Messenger
+                {t.directConnectBtn}
               </button>
             </div>
           )}
@@ -369,10 +370,10 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
               <Search className="absolute left-3 top-3 w-4 h-4 text-slate-500" />
               <input
                 type="text"
-                placeholder={lang === 'en' ? 'Search by skills prefix...' : 'Tìm kiếm kỹ năng...'}
+                placeholder={t.searchSkillsPlaceholder}
                 value={skillsSearch}
                 onChange={(e) => setSkillsSearch(e.target.value)}
-                className="w-full bg-[#161616] border border-white/5 text-xs text-white rounded-xl pl-9 pr-3 py-2.5 focus:outline-none"
+                className="w-full bg-[#161616] border border-white/5 text-xs text-white rounded-2xl pl-10 pr-3 py-2.5 focus:outline-none"
               />
             </div>
 
@@ -401,9 +402,9 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
 
                   <button
                     onClick={() => addToast(lang === 'en' ? `Invited ${peer.studentName} to study panel` : `Đã kết nối với ${peer.studentName}`, 'success')}
-                    className="w-full py-2 bg-white/5 text-slate-300 hover:text-white rounded-xl text-[10px] font-bold transition cursor-pointer"
+                    className="w-full py-2 bg-[#0D0D0D] text-white hover:bg-[#1B1B1B] rounded-2xl text-[10px] font-bold transition cursor-pointer border border-white/10 shadow-sm"
                   >
-                    Send Exchange Invite
+                    {t.sendExchangeInvite}
                   </button>
                 </div>
               ))}
@@ -438,9 +439,7 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
 
                     <p className="text-[11px] text-slate-400 leading-relaxed font-sans">{mentor.bio}</p>
 
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {mentor.skills.map(s => <span key={s} className="px-2 py-0.5 bg-[#CCFF00]/10 text-[#CCFF00] rounded text-[9px]" style={{ color: accentColor, backgroundColor: `${accentColor}12` }}>{s}</span>)}
-                    </div>
+                    {/* mentor.skills display removed per UI cleanup */}
                   </div>
 
                   <div className="space-y-3 pt-4 border-t border-white/5">
@@ -502,16 +501,16 @@ export const ResourceMarketplaceMentorModule: React.FC<ResourceMarketplaceMentor
                     <button
                       type="button"
                       onClick={() => setSelectedMentor(null)}
-                      className="px-4 py-2 bg-white/5 text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
+                      className="px-4 py-2 bg-white/5 text-slate-300 text-xs font-bold rounded-2xl cursor-pointer transition hover:bg-white/10"
                     >
-                      Cancel
+                      {t.cancelButton}
                     </button>
                     <button
                       type="submit"
-                      className="px-5 py-2 text-black text-xs font-black uppercase rounded-xl cursor-pointer"
+                      className="px-5 py-2 text-black text-xs font-black uppercase rounded-2xl cursor-pointer transition hover:opacity-95"
                       style={{ backgroundColor: accentColor }}
                     >
-                      Submit inquiry
+                      {t.submitInquiryBtn}
                     </button>
                   </div>
                 </form>

@@ -5,8 +5,10 @@ import { INITIAL_RESOURCES } from '../data';
 
 interface ResourceState {
   resources: Resource[];
-  addResource: (title: string, category: 'Report' | 'Slides' | 'Source Code' | 'Template' | 'Material', size: string, sharedBy: string) => Resource;
+  addResource: (title: string, category: Resource['category'], size: string, sharedBy: string) => Resource;
   incrementDownloads: (resId: string) => void;
+  updateResourceAdminState: (resId: string, updates: Pick<Partial<Resource>, 'reviewStatus' | 'category'>) => void;
+  deleteResource: (resId: string) => void;
   setResources: (resources: Resource[]) => void;
 }
 
@@ -24,6 +26,7 @@ export const useResourceStore = create<ResourceState>()(
           downloads: 0,
           size,
           link: '#',
+          reviewStatus: 'Pending',
         };
         set((state) => ({ resources: [added, ...state.resources] }));
         return added;
@@ -34,6 +37,18 @@ export const useResourceStore = create<ResourceState>()(
           resources: state.resources.map((res) =>
             res.id === resId ? { ...res, downloads: res.downloads + 1 } : res
           ),
+        })),
+
+      updateResourceAdminState: (resId, updates) =>
+        set((state) => ({
+          resources: state.resources.map((res) =>
+            res.id === resId ? { ...res, ...updates } : res
+          ),
+        })),
+
+      deleteResource: (resId) =>
+        set((state) => ({
+          resources: state.resources.filter((res) => res.id !== resId),
         })),
 
       setResources: (resources) => set({ resources }),

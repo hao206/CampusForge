@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { 
   BrowserRouter, Routes, Route, Link, useLocation, useNavigate 
 } from 'react-router-dom';
@@ -15,26 +15,34 @@ import { useUIStore } from './store/useUIStore';
 import { useAuthStore } from './store/useAuthStore';
 import { useNotificationStore } from './store/useNotificationStore';
 import { useToastStore } from './store/useToastStore';
+import { useAdminStore } from './store/useAdminStore';
 import { useAuditStore } from './store/useAuditStore';
-
-// Page Views
-import { Dashboard } from './pages/Dashboard';
-import { Achievements } from './pages/Achievements';
-import { Settings as SettingsPage } from './pages/Settings';
-import { ProfilePage } from './pages/ProfilePage';
-import { Admin as AdminPage } from './pages/Admin';
-
-// Submodule Views
-import { ProjectHubModule } from './components/ProjectHubModule';
-import { TeamFlowModule } from './components/TeamFlowModule';
-import { CommunityModule } from './components/CommunityModule';
-import { ResourceMarketplaceMentorModule } from './components/ResourceMarketplaceMentor';
+import { Role } from './types';
 
 // Auth View
 import { AuthModule } from './components/AuthModule';
 
 // Global Search
 import { GlobalSearch } from './components/GlobalSearch';
+
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Achievements = lazy(() => import('./pages/Achievements'));
+const SettingsPage = lazy(() => import('./pages/Settings'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const AdminPage = lazy(() => import('./pages/Admin'));
+const ProjectHubModule = lazy(() => import('./components/ProjectHubModule').then((module) => ({ default: module.ProjectHubModule })));
+const TeamFlowModule = lazy(() => import('./components/TeamFlowModule').then((module) => ({ default: module.TeamFlowModule })));
+const CommunityModule = lazy(() => import('./components/CommunityModule').then((module) => ({ default: module.CommunityModule })));
+const ResourceMarketplaceMentorModule = lazy(() => import('./components/ResourceMarketplaceMentor').then((module) => ({ default: module.ResourceMarketplaceMentorModule })));
+
+const RouteSkeleton: React.FC = () => (
+  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-pulse">
+    <div className="lg:col-span-8 h-64 rounded-2xl bg-white/5 border border-white/5" />
+    <div className="lg:col-span-4 h-64 rounded-2xl bg-white/5 border border-white/5" />
+    <div className="lg:col-span-6 h-40 rounded-2xl bg-white/5 border border-white/5" />
+    <div className="lg:col-span-6 h-40 rounded-2xl bg-white/5 border border-white/5" />
+  </div>
+);
 
 // --- SUBMODULE TOAST STACK ---
 const ToastStack: React.FC = () => {
@@ -132,7 +140,7 @@ const Layout: React.FC = () => {
     navigate('/');
   };
 
-  const isGovUser = user?.role === 'Admin' || user?.role === 'Project Leader';
+  const isGovUser = user?.role === 'Admin' || user?.role === 'Super Admin';
 
   const tabItems = [
     { label: t.dashboard, path: '/', icon: LayoutDashboard },
@@ -227,17 +235,18 @@ const Layout: React.FC = () => {
                   style={{ width: `${Math.min((user.reputationScore / 5000) * 100, 100)}%`, backgroundColor: accent }}
                 />
               </div>
-              <div className="flex justify-between items-center pt-2">
+                <div className="flex justify-between items-center pt-2">
                 <div className="flex items-center gap-2">
                   <img src={user.avatar} className="w-6.5 h-6.5 rounded-full object-cover border border-white/15" alt="user avatar" />
                   <span className="text-[10px] font-bold text-white max-w-[100px] truncate">{user.fullName.split(' ')[0]}</span>
                 </div>
-                <button 
-                  onClick={handleLogout} 
-                  className="p-1.5 hover:bg-red-500/10 text-slate-500 hover:text-red-400 rounded-lg transition"
-                  title="Logout Session"
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs flex items-center gap-2 transition"
+                  title={t.logout}
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <LogOut className="w-4 h-4" />
+                  <span className="uppercase text-[10px] tracking-wider">{t.logout}</span>
                 </button>
               </div>
             </div>
@@ -269,9 +278,9 @@ const Layout: React.FC = () => {
             {/* Lang toggle */}
             <button 
               onClick={() => setLang(lang === 'en' ? 'vi' : 'en')}
-              className="p-2 w-9 h-9 rounded-xl border border-white/5 text-[9px] font-mono font-bold text-slate-400 tracking-tight bg-white/5 hover:text-white cursor-pointer"
+              className="p-2.5 min-w-[44px] h-10 rounded-2xl border border-white/10 text-[10px] font-mono font-bold text-white tracking-tight bg-[#111111] hover:bg-[#1A1A1A] transition"
             >
-              {lang === 'en' ? 'VI' : 'EN'}
+              {lang === 'en' ? t.vietnamese.toUpperCase().slice(0,2) : t.english.toUpperCase().slice(0,2)}
             </button>
 
             {/* Notification drop center (Part B4) */}
@@ -427,17 +436,19 @@ const Layout: React.FC = () => {
 
         {/* ROUTER SWITCH VIEWPORT */}
         <main className="p-4 md:p-8 flex-grow">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/projects" element={<ProjectHubModule />} />
-            <Route path="/teamflow" element={<TeamFlowModule />} />
-            <Route path="/community" element={<CommunityModule />} />
-            <Route path="/resources" element={<ResourceMarketplaceMentorModule />} />
-            <Route path="/achievements" element={<Achievements />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/profile/:userId" element={<ProfilePage />} />
-            <Route path="/admin" element={<AdminPage />} />
-          </Routes>
+          <Suspense fallback={<RouteSkeleton />}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/projects" element={<ProjectHubModule />} />
+              <Route path="/teamflow" element={<TeamFlowModule />} />
+              <Route path="/community" element={<CommunityModule />} />
+              <Route path="/resources" element={<ResourceMarketplaceMentorModule />} />
+              <Route path="/achievements" element={<Achievements />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
+              <Route path="/admin" element={<AdminPage />} />
+            </Routes>
+          </Suspense>
         </main>
 
         {/* BOTTOM NAV FOR MOBILE */}
@@ -575,13 +586,26 @@ const Layout: React.FC = () => {
 export default function App() {
   const user = useAuthStore((s) => s.user);
   const login = useAuthStore((s) => s.login);
+  const authenticate = useAuthStore((s) => s.authenticate);
+  const registerAccount = useAuthStore((s) => s.registerAccount);
+  const fetchNotifications = useNotificationStore((s) => s.fetchNotifications);
   const loginAsGuest = useAuthStore((s) => s.loginAsGuest);
   const addLog = useAuditStore((s) => s.addLog);
+  const adminUsers = useAdminStore((s) => s.users);
+  const createAdminUser = useAdminStore((s) => s.createUser);
   const { lang, accent } = useUIStore();
   const t = translations[lang];
 
+  const handleLoginSuccess = (payload: { fullName: string; role: Role; studentId: string; email: string }) => {
+    login(payload);
+    if (payload.role !== 'Guest' && !adminUsers.some((userEntry) => userEntry.email.toLowerCase() === payload.email.toLowerCase())) {
+      createAdminUser({ fullName: payload.fullName, email: payload.email, role: payload.role });
+    }
+  };
+
   useEffect(() => {
     document.title = t.appName;
+    if (user) fetchNotifications();
   }, [t.appName]);
 
   if (!user) {
@@ -593,7 +617,9 @@ export default function App() {
           <AuthModule 
             t={t}
             accentColor={accent}
-            onLoginSuccess={login}
+            onLoginSuccess={handleLoginSuccess}
+            onAuthenticate={authenticate}
+            onRegister={registerAccount}
             logAction={(action, moduleName) => addLog(action, moduleName, 'Unauthenticated Student')}
             onContinueAsGuest={loginAsGuest}
           />

@@ -13,6 +13,7 @@ export interface NotificationItem {
 interface NotificationState {
   notifications: NotificationItem[];
   addNotification: (title: string, description: string, type: NotificationItem['type']) => void;
+  fetchNotifications: () => Promise<void>;
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
   clearAll: () => void;
@@ -58,6 +59,28 @@ export const useNotificationStore = create<NotificationState>()(
           type
         };
         set((state) => ({ notifications: [newItem, ...state.notifications] }));
+        // attempt to sync to server silently
+        try {
+          fetch('/api/notifications', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, message: description, type })
+          });
+        } catch (e) {
+          // ignore network errors for now
+        }
+      },
+
+      fetchNotifications: async () => {
+        try {
+          const res = await fetch('/api/notifications');
+          if (res.ok) {
+            const json = await res.json();
+            set({ notifications: json });
+          }
+        } catch (e) {
+          // network or server unavailable
+        }
       },
 
       markAsRead: (id) =>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MessageSquare, Heart, ShieldCheck, AlertOctagon, Send } from 'lucide-react';
 import { BAD_WORD_TRIGGER_LIST } from '../data';
+import { translations } from '../translations';
 
 // Zustand Stores
 import { useUIStore } from '../store/useUIStore';
@@ -18,6 +19,7 @@ export const CommunityModule: React.FC<CommunityProps> = ({
   currentUserRole
 }) => {
   const { lang, accent: accentColor } = useUIStore();
+  const t = translations[lang];
 
   const user = useAuthStore((s) => s.user);
   const posts = usePostStore((s) => s.posts);
@@ -214,7 +216,7 @@ export const CommunityModule: React.FC<CommunityProps> = ({
           {/* Preset image selectors */}
           <div className="space-y-2 pt-2 border-t border-white/5">
             <span className="text-[10px] text-slate-500 font-mono font-bold uppercase tracking-wider block">
-              {lang === 'en' ? 'Attach Academic Presentation Presets' : 'Chọn hình nền bài giảng trực quan'}
+              {t.presetImagesLabel}
             </span>
             <div className="flex gap-3">
               {imagePresets.map((img, i) => (
@@ -242,11 +244,11 @@ export const CommunityModule: React.FC<CommunityProps> = ({
           <div className="flex justify-end pt-2">
             <button
               onClick={handlePostSubmit}
-              className="px-5 py-2.5 text-black text-xs font-black uppercase rounded-xl flex items-center justify-center gap-2 transition hover:opacity-90 cursor-pointer"
-              style={{ backgroundColor: accentColor }}
+              className="px-5 py-2.5 text-black text-xs font-black uppercase rounded-2xl flex items-center justify-center gap-2 transition hover:opacity-90 cursor-pointer"
+              style={{ backgroundColor: accentColor, boxShadow: `0 10px 30px ${accentColor}33` }}
             >
               <Send className="w-3.5 h-3.5" />
-              {lang === 'en' ? 'Publish Thread' : 'Đăng bài'}
+              {t.publishBtn}
             </button>
           </div>
         </div>
@@ -257,10 +259,10 @@ export const CommunityModule: React.FC<CommunityProps> = ({
             <button
               key={topic}
               onClick={() => setActiveFilter(topic)}
-              className={`px-3.5 py-2 rounded-xl text-[10px] font-mono font-bold border transition cursor-pointer ${
-                activeFilter === topic 
-                  ? 'bg-white/10 text-[#CCFF00] border-white/10 font-bold shadow-md' 
-                  : 'bg-[#111111]/40 text-slate-400 border-white/5 hover:text-white'
+              className={`px-3.5 py-2 rounded-2xl text-[10px] font-mono font-bold border transition-all duration-200 cursor-pointer ${
+                activeFilter === topic
+                  ? 'bg-white/10 text-[#CCFF00] border-white/10 shadow-lg'
+                  : 'bg-[#111111]/30 text-slate-400 border-white/5 hover:bg-[#161616] hover:text-white'
               }`}
             >
               {topic === 'All' ? (lang === 'en' ? 'ALL TOPICS' : 'TẤT CẢ CHỦ ĐỀ') : topic.toUpperCase()}
@@ -359,8 +361,8 @@ export const CommunityModule: React.FC<CommunityProps> = ({
                   />
                   <button
                     onClick={() => handleCommentSubmit(post.id)}
-                    className="p-2.5 bg-white/5 hover:bg-white/10 hover:text-white text-slate-400 rounded-xl transition cursor-pointer"
-                    title="Send comment"
+                    className="p-2.5 bg-[#0f0f0f] hover:bg-[#1d1d1d] text-white rounded-2xl transition-all duration-200 cursor-pointer border border-white/10 shadow-sm"
+                    title={lang === 'en' ? 'Send comment' : 'Gửi bình luận'}
                   >
                     <Send className="w-3.5 h-3.5" />
                   </button>

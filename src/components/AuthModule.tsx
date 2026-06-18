@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { Shield, Key, Eye, EyeOff, User, Mail, GraduationCap } from 'lucide-react';
 import { Translations } from '../translations';
+import { Role } from '../types';
 
 interface AuthModuleProps {
   t: Translations;
   accentColor: string;
-  onLoginSuccess: (user: { fullName: string; role: string; studentId: string; email: string }) => void;
+  onLoginSuccess: (user: { fullName: string; role: Role; studentId: string; email: string }) => void;
+  onAuthenticate: (email: string, password: string) => { fullName: string; role: Role; studentId: string; email: string } | undefined;
+  onRegister: (account: { email: string; password: string; fullName: string; studentId: string; role: Role }) => boolean;
   logAction: (action: string, moduleName: string) => void;
   onContinueAsGuest?: () => void;
 }
 
-export const AuthModule: React.FC<AuthModuleProps> = ({ t, accentColor, onLoginSuccess, logAction, onContinueAsGuest }) => {
+export const AuthModule: React.FC<AuthModuleProps> = ({ t, accentColor, onLoginSuccess, onAuthenticate, onRegister, logAction, onContinueAsGuest }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,10 +23,15 @@ export const AuthModule: React.FC<AuthModuleProps> = ({ t, accentColor, onLoginS
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-  const [univDomain, setUnivDomain] = useState('st.utt.edu.vn'); // Configurable university domains
 
   const validateEmail = (emailStr: string) => {
-    return emailStr.toLowerCase().endsWith(`@${univDomain}`);
+    const normalized = emailStr.trim().toLowerCase();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized);
+  };
+
+  const passwordPolicy = (pwd: string) => {
+    const trimmed = pwd.trim();
+    return trimmed.length >= 8 && /[A-Z]/.test(trimmed) && /[a-z]/.test(trimmed) && /\d/.test(trimmed);
   };
 
   const handleAuthSubmit = (e: React.FormEvent) => {
@@ -37,39 +45,46 @@ export const AuthModule: React.FC<AuthModuleProps> = ({ t, accentColor, onLoginS
     }
 
     if (!validateEmail(email)) {
-      setErrorMsg(`${t.emailValidationMsg} (Target: @${univDomain})`);
+      setErrorMsg(t.emailValidationMsg);
       return;
     }
 
-    if (password.length < 6) {
-      setErrorMsg(t.passwordLength);
+    if (!passwordPolicy(password)) {
+      setErrorMsg(t.passwordPolicy);
       return;
     }
 
     if (isLogin) {
-      // Simulate JWT creation and authentication
-      const userRole = email.includes('admin') ? 'Admin' : email.includes('mod') ? 'Moderator' : 'Student';
-      const mockName = fullName || (email.split('@')[0].replace('.', ' ').toUpperCase());
-      const payloadUser = {
-        fullName: mockName,
-        role: userRole,
-        studentId: studentId || '73DCTT20042',
-        email: email
-      };
-      
-      logAction(`User logged in successfully (Role: ${userRole}, Email: ${email})`, 'Auth & Security');
-      onLoginSuccess(payloadUser);
+      const authenticated = onAuthenticate(email, password);
+      if (!authenticated) {
+        setErrorMsg(t.invalidCredentials);
+        return;
+      }
+
+      logAction(`User logged in successfully (Role: ${authenticated.role}, Email: ${authenticated.email})`, 'Auth & Security');
+      onLoginSuccess(authenticated);
     } else {
       if (!fullName || !studentId) {
         setErrorMsg(t.fillAllFields);
         return;
       }
-      setSuccessMsg(t.challengeLaunched);
-      logAction(`Signed up new student: ${fullName} (Mã SV: ${studentId})`, 'Auth & Security');
-      setTimeout(() => {
-        setIsLogin(true);
-        setErrorMsg('');
-      }, 3000);
+
+      const registered = onRegister({
+        email: email.trim().toLowerCase(),
+        password,
+        fullName: fullName.trim(),
+        studentId: studentId.trim(),
+        role: 'Student',
+      });
+
+      if (!registered) {
+        setErrorMsg(t.emailAlreadyRegistered);
+        return;
+      }
+
+      setSuccessMsg(t.registrationSuccess);
+      logAction(`Registered new student account: ${fullName} (${email})`, 'Auth & Security');
+      onLoginSuccess({ fullName: fullName.trim(), role: 'Student', studentId: studentId.trim(), email: email.trim().toLowerCase() });
     }
   };
 
@@ -158,19 +173,12 @@ export const AuthModule: React.FC<AuthModuleProps> = ({ t, accentColor, onLoginS
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="student@st.utt.edu.vn"
+                placeholder="student@example.com"
                 className="w-full bg-[#161616] border border-white/5 text-sm text-white rounded-xl py-2.5 pl-10 pr-4 focus:outline-none focus:border-white/20 transition-all font-mono"
               />
             </div>
-            <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500">
-              <span>{t.appName === "CampusForge" && (isLogin ? "Domain target constraint:" : "Ràng buộc tên miền:")} <strong>@{univDomain}</strong></span>
-              <button 
-                type="button" 
-                onClick={() => setUnivDomain(univDomain === 'st.utt.edu.vn' ? 'utt.edu.vn' : 'st.utt.edu.vn')}
-                className="text-slate-400 hover:underline cursor-pointer"
-              >
-                {t.appName === "CampusForge" && (isLogin ? "Toggle Domain" : "Thay đổi tên miền")}
-              </button>
+            <div className="mt-1 text-[10px] text-slate-500">
+              {t.appName === "CampusForge" && (isLogin ? "Enter any valid email address." : "Nhập email hợp lệ.")}
             </div>
           </div>
 

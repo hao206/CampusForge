@@ -19,6 +19,15 @@ export interface Translations {
   resourceCenter: string;
   skillExchange: string;
   mentorConnect: string;
+  resourceSearchPlaceholder: string;
+  allResourcesLabel: string;
+  directConnectBtn: string;
+  searchSkillsPlaceholder: string;
+  sendExchangeInvite: string;
+  mentorAskTitle: string;
+  cancelButton: string;
+  submitInquiryBtn: string;
+  securityShieldLabel: string;
   achievements: string;
   adminPanel: string;
   settings: string;
@@ -82,6 +91,7 @@ export interface Translations {
   profileAvatarLabel: string;
   miniBioLabel: string;
   terminateSession: string;
+  loginToEditBtn: string;
 
   // Modals / Guest Interceptions
   guestReqTitle: string;
@@ -169,6 +179,10 @@ export interface Translations {
   accessSession: string;
   emailRequired: string;
   passwordLength: string;
+  passwordPolicy: string;
+  invalidCredentials: string;
+  emailAlreadyRegistered: string;
+  registrationSuccess: string;
   fillAllFields: string;
   challengeLaunched: string;
   enterEmailRecovery: string;
@@ -186,11 +200,15 @@ export const translations: Record<'en' | 'vi', Translations> = {
     forgotPassword: "Forgot Password?",
     resetPassword: "Reset Password",
     rememberMe: "Remember Me",
-    emailPlaceholder: "University email (@st.utt.edu.vn)",
+    emailPlaceholder: "University email (any valid email)",
     passwordPlaceholder: "Password",
     fullnamePlaceholder: "Full Name",
     studentIdPlaceholder: "Student ID (e.g., 73DCTT...)",
-    emailValidationMsg: "Only @st.utt.edu.vn email domain is allowed.",
+    emailValidationMsg: "Please enter a valid email address.",
+    passwordPolicy: "Password must be at least 8 characters, with uppercase, lowercase, and a number.",
+    invalidCredentials: "Email or password is incorrect.",
+    emailAlreadyRegistered: "This email is already registered.",
+    registrationSuccess: "Registration complete. You are now logged in.",
     dashboard: "Dashboard",
     projectHub: "Project Hub",
     teamFlow: "TeamFlow Pro",
@@ -198,6 +216,15 @@ export const translations: Record<'en' | 'vi', Translations> = {
     resourceCenter: "Resource Center",
     skillExchange: "Skill Exchange",
     mentorConnect: "Mentor Connect",
+    resourceSearchPlaceholder: "Filter files...",
+    allResourcesLabel: "All Classes",
+    directConnectBtn: "Direct Connect Messenger",
+    searchSkillsPlaceholder: "Search by skills prefix...",
+    sendExchangeInvite: "Send Exchange Invite",
+    mentorAskTitle: "Ask Professor",
+    cancelButton: "Cancel",
+    submitInquiryBtn: "Submit Inquiry",
+    securityShieldLabel: "Automated Security Shield Active",
     achievements: "Leaderboard & Badges",
     adminPanel: "Admin Suite",
     settings: "Personalization",
@@ -241,6 +268,7 @@ export const translations: Record<'en' | 'vi', Translations> = {
     guestModeBannerTitle: "You are browsing in Guest Mode",
     guestModeBannerDesc: "You can view public academic initiatives, explore general community threads, search info and download documents freely. Register or Sign In to register new projects, submit comments, apply to project teams or assign team tasks.",
     guestModeLoginBtn: "🔐 MEMBER SIGN IN",
+    loginToEditBtn: "Login to Edit",
     studentDashboardTitle: "Student Dashboard",
     welcomeFrameworkDesc: "Welcome to CampusForge portal framework. Currently contributing towards Module 17: Security Systems & JWT Auth parameter validations.",
     activeStudentsContributing: "active students currently contributing",
@@ -363,11 +391,15 @@ export const translations: Record<'en' | 'vi', Translations> = {
     forgotPassword: "Quên mật khẩu?",
     resetPassword: "Đặt lại mật khẩu",
     rememberMe: "Ghi nhớ đăng nhập",
-    emailPlaceholder: "Email trường (@st.utt.edu.vn)",
+    emailPlaceholder: "Email trường (bất kỳ email hợp lệ)",
     passwordPlaceholder: "Mật khẩu bảo mật",
     fullnamePlaceholder: "Họ và tên thí sinh",
     studentIdPlaceholder: "Mã số sinh viên (Vd: 73DCTT...)",
-    emailValidationMsg: "Chỉ cho phép tài khoản Email đuôi @st.utt.edu.vn.",
+    emailValidationMsg: "Vui lòng nhập địa chỉ email hợp lệ.",
+    passwordPolicy: "Mật khẩu cần ít nhất 8 ký tự, gồm chữ hoa, chữ thường và số.",
+    invalidCredentials: "Email hoặc mật khẩu không chính xác.",
+    emailAlreadyRegistered: "Email này đã được đăng ký.",
+    registrationSuccess: "Đăng ký thành công. Bạn đã được đăng nhập.",
     dashboard: "Trang Tổng Quan",
     projectHub: "Cổng Dự Án",
     teamFlow: "Quy Trình Nhóm",
@@ -375,6 +407,15 @@ export const translations: Record<'en' | 'vi', Translations> = {
     resourceCenter: "Thư Viện Tài Nguyên",
     skillExchange: "Chợ Trao Đổi Kỹ Năng",
     mentorConnect: "Kết Nối Cố Vấn",
+    resourceSearchPlaceholder: "Tìm tài liệu học tập...",
+    allResourcesLabel: "Tất cả tài liệu",
+    directConnectBtn: "Gửi kết nối trực tiếp",
+    searchSkillsPlaceholder: "Tìm kiếm kỹ năng...",
+    sendExchangeInvite: "Gửi lời mời trao đổi",
+    mentorAskTitle: "Hỏi Giảng Viên",
+    cancelButton: "Hủy Bỏ",
+    submitInquiryBtn: "Gửi yêu cầu",
+    securityShieldLabel: "Bộ bảo vệ an ninh hoạt động",
     achievements: "Xếp Hạng & Huy Chương",
     adminPanel: "Bảng Quản Trị",
     settings: "Cơ Bản & Giao Diện",
@@ -438,6 +479,7 @@ export const translations: Record<'en' | 'vi', Translations> = {
     profileAvatarLabel: "Đường dẫn ảnh đại diện mới (Unsplash)",
     miniBioLabel: "Tiểu sử sinh viên ngắn",
     terminateSession: "Đăng Xuất Khỏi Hệ Thống",
+    loginToEditBtn: "Đăng nhập để chỉnh sửa",
 
     // Modals / Guest Interceptions
     guestReqTitle: "Yêu Cầu Thành Viên",

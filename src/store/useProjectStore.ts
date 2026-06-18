@@ -8,6 +8,8 @@ interface ProjectState {
   createProject: (newProj: Omit<Project, 'id' | 'progress' | 'leaderId' | 'leaderName'>, leaderId: string, leaderName: string) => Project;
   applyProject: (projId: string, remark: string, applicantName: string) => void;
   updateProjectProgress: (projId: string, progress: number) => void;
+  updateProjectAdminState: (projId: string, updates: Pick<Partial<Project>, 'reviewStatus' | 'hidden' | 'featured' | 'status'>) => void;
+  deleteProject: (projId: string) => void;
   setProjects: (projects: Project[]) => void;
 }
 
@@ -23,6 +25,9 @@ export const useProjectStore = create<ProjectState>()(
           progress: 0,
           leaderId,
           leaderName,
+          reviewStatus: 'Pending',
+          hidden: false,
+          featured: false,
         };
         set((state) => ({ projects: [added, ...state.projects] }));
         return added;
@@ -39,6 +44,18 @@ export const useProjectStore = create<ProjectState>()(
           projects: state.projects.map((p) =>
             p.id === projId ? { ...p, progress } : p
           ),
+        })),
+
+      updateProjectAdminState: (projId, updates) =>
+        set((state) => ({
+          projects: state.projects.map((p) =>
+            p.id === projId ? { ...p, ...updates } : p
+          ),
+        })),
+
+      deleteProject: (projId) =>
+        set((state) => ({
+          projects: state.projects.filter((p) => p.id !== projId),
         })),
 
       setProjects: (projects) => set({ projects }),
